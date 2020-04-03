@@ -2,11 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+ * take a look around!
+ * 
+*/
+
 public class FreeCam : MonoBehaviour
 {
 
-    [SerializeField] private float speed = 10.0f;
-    [SerializeField] private float sensitivity = 1.0f;
+    [SerializeField] private float speed = 1;
+    [SerializeField] private float sensitivity = 1;
 
     void FixedUpdate()
     {

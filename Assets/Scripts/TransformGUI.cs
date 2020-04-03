@@ -2,6 +2,14 @@
 using UnityEditor.IMGUI.Controls;
 using UnityEngine;
 
+/*
+ * This allows the visual setting of lock angles for the DriveP transforms 
+ * 
+ * Additionally it ensures that editor adjustments to transform rotations are tracked within the TransformController
+ * 
+ * 
+*/
+
 [CustomEditor(typeof(TransformController))]
 public class TransformGUI : Editor
 {

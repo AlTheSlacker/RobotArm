@@ -2,6 +2,23 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+ * this script is attached to each of the DriveP? gameobjects and is used to control their motion
+ * 
+ * do not attempt to directly access the transforms without using the methods here
+ * 
+ * FreeDOF is the free degree of freedom, where 1-6 are the 3 translations, followed by the 3 rotations, eg DOF 5 is y rotation
+ * only one DOF can be free per DriveP
+ * 
+ * base velocity is the speed at which the transform will move to the desired location in degrees / second
+ * this velocity can be globally overwritten from the ArmController
+ * 
+ * LockMin/Max can be typed in or set visually with the handles. 0 degrees is the direction of the parent transform axis
+ * if you position the transform in the editor by changing the rotation angle, the child body will rotate within the static lock angles
+ * i.e. if you set a mobility range for an arm, you can then set the initial rotation of the arm using the editor, without messing up the lock angles
+ * 
+*/
+
 public class TransformController : MonoBehaviour
 {
 

@@ -1,12 +1,28 @@
 ﻿using System.Collections;
 using UnityEngine;
 
+/*
+ * Control the behaviour of the arm from here, some of this code is specific to the arm geometry, 
+ * most will adapt easily to other installations
+ * 
+ * Select control methods here, some methods will overide others e.g. enableTracking will constantly interfere with other methods
+ * 
+ * To initially position the arm set the transform angle for the DriveP? transform in the editor, this will automatically sort out lock angles etc.
+ * 
+ * Do not directly change transforms from code without using the TransformController methods or you will be sad
+ * 
+*/
+
+
 public class ArmController : MonoBehaviour
 {
     [SerializeField] private TransformController[] clampDriver = new TransformController[] { };
     [SerializeField] private TransformController[] transformDriver = new TransformController[] { };
     [SerializeField] private GameObject trackObject = null;
     [SerializeField] private float allRotationalVelocity = 20;
+    [SerializeField] private bool enableManualControl = true;
+    [SerializeField] private bool enableMoveToPosition = false;
+    [SerializeField] private bool enableTracking = false;
 
     private float rotationalStep = 0;
     private float translationalStep = 0.001f;
@@ -15,21 +31,20 @@ public class ArmController : MonoBehaviour
     {
         SetAngularVel(allRotationalVelocity);
         rotationalStep = allRotationalVelocity * Time.deltaTime * 1.05f;
+
         // example of pre-recorded positioning, including time control
-        //MoveToPosition();
+        if (enableMoveToPosition) MoveToPosition();
     }
 
     void Update()
     {
         // ManualController() allows keyboard control using the key pairs [rf] [tg] [yh] [uj] [ik] [ol] [p;]
-        // ManualController();
-
-        
+        if (enableManualControl) ManualController();
     }
 
     void FixedUpdate()
     {
-        // TrackObject();
+        if (enableTracking) TrackObject();
     }
 
     private void ManualController( )
@@ -52,7 +67,7 @@ public class ArmController : MonoBehaviour
         }
 
         // reset all joints to their initial position
-        if (Input.GetButton("Jump"))
+        if (Input.GetButton("Jump")) // (Jump.... pro-slacking)
         {
             for (int i = 0; i < clampDriver.Length; i++) clampDriver[i].ReturnToInitialCondition();
             for (int i = 0; i < transformDriver.Length; i++) transformDriver[i].ReturnToInitialCondition();
@@ -67,6 +82,7 @@ public class ArmController : MonoBehaviour
         float distanceToTracked;
         float angleToRefPlane;
 
+        // adjustment specific to this arm geometry due to the offset of the grab from the plane of the arm rotation
         float angularArmOffset = 2.249f;
 
         directionToTracked = trackPosition - transformDriver[0].transform.position;
@@ -86,25 +102,28 @@ public class ArmController : MonoBehaviour
 
     }
 
+    // used to get projected angle on a plane
     private float CalcSignedCentralAngle(Vector3 dir1Vector, Vector3 dir2Vector, Vector3 normalVector)
     {
         return Mathf.Atan2(Vector3.Dot(Vector3.Cross(dir1Vector, dir2Vector), normalVector), Vector3.Dot(dir1Vector, dir2Vector)) * Mathf.Rad2Deg;
     }
 
+    // lazy way to set all joint rotational velocities
     private void SetAngularVel(float vel)
     {
-        // lazy way to set all joint rotational velocities
         for (int i = 0; i < transformDriver.Length; i++)
         {
             transformDriver[i].BaseVelocity = vel;
         }
     }
 
+    // move without a coroutine, motion starts immediately
     private void MoveNow(TransformController transformController, float position)
     {
         transformController.AbsoluteDisplacement(position);
     }
 
+    // move arm to a position with option to use timings for start of each tranforms motion
     private void MoveToPosition()
     {
         // define an orientation for a transform, to begin at a specific delay after this function is called
