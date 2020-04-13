@@ -82,7 +82,7 @@ public class ArmController : MonoBehaviour
     private void TrackObject()
     {
         // fun with kinematics
-        // this approach allows the solving of a 3R problem without resorting to an inverse kinematic solution
+        // this approach allows the solving of a 4R problem without resorting to an inverse kinematic solution
         // the strategy is to reduce the problem to a cosine rule calculation for the two main arms
         // unfortunately this appears more complex than it is as some corrections have to be made for the arm geometry
 
