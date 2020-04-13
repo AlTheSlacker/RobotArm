@@ -12,6 +12,12 @@ public class FreeCam : MonoBehaviour
 
     [SerializeField] private float speed = 1;
     [SerializeField] private float sensitivity = 1;
+    private Vector3 posCam;
+
+    private void Start()
+    {
+        posCam = new Vector3(transform.position.x, transform.position.y, transform.position.z);
+    }
 
     void FixedUpdate()
     {
@@ -24,9 +30,8 @@ public class FreeCam : MonoBehaviour
         transform.rotation = Quaternion.Euler(rotCam);
 
         // translation
-        Vector3 transCam = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-        transCam = transCam * Time.deltaTime * speed;
-        transform.Translate(transCam);
+        posCam = posCam + new Vector3(Input.GetAxis("XX"), Input.GetAxis("YY"), Input.GetAxis("ZZ")) * Time.deltaTime * speed;
+        transform.position  = posCam;
     }
 
 }
