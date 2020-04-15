@@ -43,6 +43,7 @@ public class ArmController : MonoBehaviour
     {
         // ManualController() allows keyboard control using the key pairs [rf] [tg] [yh] [uj] [ik] [ol] [p;]
         if (enableManualControl) ManualController();
+        
         // do not use this with MoveToPosition() or ManualController().
         // this will automatically track the target object as you move it around wasd + qe for y displacements
         if (enableTracking) TrackObject();
@@ -100,7 +101,6 @@ public class ArmController : MonoBehaviour
         
         // orient arm system to face object
         Vector3 directionToTracked = trackPosition - transformDriver[0].transform.position;
-        float distanceToTracked = Vector3.Magnitude(trackPosition - transformDriver[0].transform.position);
         p1DriverAngle = CalcSignedCentralAngle(transformDriver[0].transform.parent.right, directionToTracked, transformDriver[0].transform.parent.up) + angularCorrectionP1;
 
         // angular correction for the P4 driver transform (due to arm geometry - arm3 introduces a translational offset)
@@ -108,10 +108,9 @@ public class ArmController : MonoBehaviour
 
         // work out P2 and P4 (P3 is an unused rotation axis)
         directionToTracked = trackPosition - transformDriver[1].transform.position;
-        distanceToTracked = Vector3.Magnitude(directionToTracked);
         Vector3 direction1 = transformDriver[1].transform.parent.right;
 
-        if (distanceToTracked > armLength1 + armLength2 + armLength3)   
+        if (Vector3.Magnitude(directionToTracked) > armLength1 + armLength2 + armLength3)   
         // can't reach, just point at it
         {
             p2DriverAngle = CalcSignedCentralAngle(direction1, directionToTracked, transformDriver[1].transform.parent.forward);
