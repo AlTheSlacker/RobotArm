@@ -1751,8 +1751,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   freeDOF: 6
   baseVelocity: 50
-  lockMin: -165.46974
-  lockMax: 160.78116
+  lockMin: -160
+  lockMax: 160
   initialOffset: 0
 --- !u!1 &1798167877
 GameObject:

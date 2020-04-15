@@ -55,7 +55,7 @@ public class TransformController : MonoBehaviour
         }
     }
 
-    void FixedUpdate()
+    void Update()
     {
         float displacementPerDeltaTime = baseVelocity * Time.deltaTime;
         float displacementToTarget = ShortestRoute(drivenPosRot[FreeDOF - 1], targetPosition);

@@ -43,10 +43,6 @@ public class ArmController : MonoBehaviour
     {
         // ManualController() allows keyboard control using the key pairs [rf] [tg] [yh] [uj] [ik] [ol] [p;]
         if (enableManualControl) ManualController();
-    }
-
-    void FixedUpdate()
-    {
         // do not use this with MoveToPosition() or ManualController().
         // this will automatically track the target object as you move it around wasd + qe for y displacements
         if (enableTracking) TrackObject();
